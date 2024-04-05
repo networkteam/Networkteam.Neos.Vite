@@ -37,6 +37,7 @@ export default defineConfig((configEnv) => ({
         header: "Resources/Private/Javascript/header.js",
       },
       output: {
+        // If you use this output option the Fusion object will just work™️
         dir: "Resources/Public/Dist",
       },
     },
@@ -56,6 +57,17 @@ This Fusion object will use a different include based on the FLOW_CONTEXT:
 
 - Development: Loads entry from development server configured for the site (defaults to http://localhost:5173/)
 - Production: Based on the generated manifest file it will include the hashed assets with CSS and recursive imports
+
+By default the manifest is expected in `Resources/Public/Dist`, but that can be changed by overriding Fusion properties:
+
+```fusion
+prototype(Networkteam.Neos.Vite:Asset) {
+    // ...
+
+    outputPathPattern = 'resource://{sitePackageKey}/Public/Dist'
+    manifest = '.vite/manifest.json'
+}
+```
 
 ## Multi-site
 

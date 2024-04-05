@@ -46,9 +46,7 @@ class AssetIncludesBuilderFunctionalTest extends FunctionalTestCase
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/main.b82dbe22.css">' . PHP_EOL .
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.a834bfc3.css">' . PHP_EOL .
             '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/main.4889e940.js"></script>' . PHP_EOL .
-            '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
+            '<script type="modulepreload" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
             , $html, 'should use site specific server URL');
-
-
     }
 }

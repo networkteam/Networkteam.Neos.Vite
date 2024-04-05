@@ -100,7 +100,7 @@ class AssetIncludesBuilder
         foreach ($imports as $import) {
             $manifestEntry = $manifestJson[$import];
             if (isset($manifestEntry['file'])) {
-                $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
+                $includes[] = '<script type="modulepreload" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
             }
             if (isset($manifestEntry['imports'])) {
                 $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);

@@ -1,0 +1,15 @@
+Networkteam:
+  Neos:
+    Vite:
+      server:
+        _default:
+          url: http://localhost:5173/
+
+        # site-node-name:
+        #   url: http://localhost:5174/
+
+Neos:
+  Neos:
+    fusion:
+      autoInclude:
+        Networkteam.Neos.Vite: true

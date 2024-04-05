@@ -1,0 +1,15 @@
+{
+    "name": "networkteam/neos-vite",
+    "type": "neos-package",
+    "description": "Integrate Vite for asset bundling into Neos CMS",
+    "version": "0.1.0",
+    "require": {
+        "neos/neos": "^8",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Networkteam\\Neos\\Vite\\": "Classes"
+        }
+    }
+}

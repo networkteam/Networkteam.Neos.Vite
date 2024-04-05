@@ -1,0 +1,9 @@
+prototype(Networkteam.Neos.Vite:Asset) {
+    @class = 'Networkteam\\Neos\\Vite\\Fusion\\AssetImplementation'
+
+    node = ${node}
+    outputPathPattern = 'resource://{sitePackageKey}/Public/Dist'
+    manifest = '.vite/manifest.json'
+    outputPath = null
+    entry = null
+}

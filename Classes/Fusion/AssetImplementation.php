@@ -29,15 +29,21 @@ class AssetImplementation extends AbstractFusionObject
         $outputPathPattern = $this->fusionValue('outputPathPattern');
 
         $node = $this->fusionValue('node');
-        /** @var ContentContext $context */
-        $context = $node->getContext();
-        $site = $context->getCurrentSite();
-        $siteNodeName = $site->getNodeName();
 
-        if (empty($outputPath)) {
-            $outputPath = str_replace('{sitePackageKey}', $site->getSiteResourcesPackageKey(), $outputPathPattern);
+        if (class_exists(\Sitegeist\Monocle\Controller\StyleguideController::class) && $node === null) {
+            // This is a workaround for the monocle styleguide, where the node is not available
+            $outputPath = '';
+            $siteNodeName = '_default';
+        } else {
+            /** @var ContentContext $context */
+            $context = $node->getContext();
+            $site = $context->getCurrentSite();
+            $siteNodeName = $site->getNodeName();
+
+            if (empty($outputPath)) {
+                $outputPath = str_replace('{sitePackageKey}', $site->getSiteResourcesPackageKey(), $outputPathPattern);
+            }
         }
-
         $builder = new AssetIncludesBuilder($siteNodeName, $outputPath, $manifest);
 
         if ($this->environment->getContext()->isProduction()) {
@@ -45,5 +51,4 @@ class AssetImplementation extends AbstractFusionObject
         }
         return $builder->developmentInclude($entry);
     }
-
 }

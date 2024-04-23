@@ -71,8 +71,8 @@ prototype(Networkteam.Neos.Vite:Asset) {
 
 ## Multi-site
 
-Configure individual Vite configurations for each site by adding a `vite.config.mjs` file in each site package.
-Make sure to run each server on a different port.
+Configure individual Vite configurations for each site by adding a Vite setup with a corresponding `vite.config.mjs` file in _each_ site package.
+Make sure to run each server on a different port by configuring the `server.port` option in the Vite configuration.
 
 Add Settings for each site in your `Settings.yaml`:
 
@@ -81,12 +81,13 @@ Networkteam:
   Neos:
     Vite:
       server:
-        # This is the default setting if no configuration part is found for the site node name
+        # This is the default setting if no configuration part is found for the site package key
         _default:
           url: http://localhost:5173/
 
-        # Specify server configuration for a specific site node name
-        other-site:
+        # Specify server configuration for a specific site package key
+        MyExample.Site:
           url: http://localhost:5174/
-
 ```
+
+Make sure to run multiple Vite servers for each site package.

@@ -1,7 +1,10 @@
 prototype(Networkteam.Neos.Vite:Asset) {
     @class = 'Networkteam\\Neos\\Vite\\Fusion\\AssetImplementation'
 
-    node = ${node}
+    # We get the current site package key either from a context variable (e.g. for Monocle) or the current node.
+    # It is used to interpolate the outputPathPattern and select a different Vite server configuration (e.g. for multi-site setups).
+    sitePackageKey = ${sitePackageKey || node.context.currentSite.siteResourcesPackageKey}
+
     outputPathPattern = 'resource://{sitePackageKey}/Public/Dist'
     manifest = '.vite/manifest.json'
     outputPath = null

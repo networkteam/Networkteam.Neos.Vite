@@ -28,17 +28,13 @@ class AssetImplementation extends AbstractFusionObject
 
         $outputPathPattern = $this->fusionValue('outputPathPattern');
 
-        $node = $this->fusionValue('node');
-        /** @var ContentContext $context */
-        $context = $node->getContext();
-        $site = $context->getCurrentSite();
-        $siteNodeName = $site->getNodeName();
+        $sitePackageKey = $this->fusionValue('sitePackageKey');
 
         if (empty($outputPath)) {
-            $outputPath = str_replace('{sitePackageKey}', $site->getSiteResourcesPackageKey(), $outputPathPattern);
+            $outputPath = str_replace('{sitePackageKey}', $sitePackageKey, $outputPathPattern);
         }
 
-        $builder = new AssetIncludesBuilder($siteNodeName, $outputPath, $manifest);
+        $builder = new AssetIncludesBuilder($sitePackageKey, $outputPath, $manifest);
 
         if ($this->environment->getContext()->isProduction()) {
             return $builder->productionIncludes($entry);

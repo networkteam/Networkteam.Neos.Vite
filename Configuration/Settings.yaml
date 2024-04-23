@@ -5,8 +5,10 @@ Networkteam:
         _default:
           url: http://localhost:5173/
 
-        # site-node-name:
-        #   url: http://localhost:5174/
+        # You can provide a different URL (port) for the server per site per site package key:
+        #
+        ## MyExample.Site:
+        ##   url: http://localhost:5174/
 
 Neos:
   Neos:

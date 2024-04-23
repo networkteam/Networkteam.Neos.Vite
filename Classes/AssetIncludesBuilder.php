@@ -24,7 +24,7 @@ class AssetIncludesBuilder
     protected $resourceManager;
 
     public function __construct(
-        private string $siteNodeName,
+        private string $sitePackageKey,
         private string $outputPath,
         private string $manifest
     ) {
@@ -32,8 +32,8 @@ class AssetIncludesBuilder
 
     public function developmentInclude(string $entry): string
     {
-        if (isset($this->serverConfiguration[$this->siteNodeName]['url'])) {
-            $viteServerUrl = $this->serverConfiguration[$this->siteNodeName]['url'];
+        if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
+            $viteServerUrl = $this->serverConfiguration[$this->sitePackageKey]['url'];
         } else {
             $viteServerUrl = $this->serverConfiguration['_default']['url'];
         }
@@ -100,7 +100,7 @@ class AssetIncludesBuilder
         foreach ($imports as $import) {
             $manifestEntry = $manifestJson[$import];
             if (isset($manifestEntry['file'])) {
-                $includes[] = '<script type="modulepreload" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
+                $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
             }
             if (isset($manifestEntry['imports'])) {
                 $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);

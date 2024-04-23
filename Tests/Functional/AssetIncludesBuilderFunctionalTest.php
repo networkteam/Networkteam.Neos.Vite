@@ -47,6 +47,13 @@ class AssetIncludesBuilderFunctionalTest extends FunctionalTestCase
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.a834bfc3.css">' . PHP_EOL .
             '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/main.4889e940.js"></script>' . PHP_EOL .
             '<script type="modulepreload" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
-            , $html, 'should use site specific server URL');
+            , $html, 'should create correct includes for main entry');
+
+        $html = $builder->productionIncludes('views/foo.js');
+        $this->assertEquals(
+            '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.a834bfc3.css">' . PHP_EOL .
+            '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/foo.869aea0d.js"></script>' . PHP_EOL .
+            '<script type="modulepreload" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
+            , $html, 'should create correct includes for other entries');
     }
 }

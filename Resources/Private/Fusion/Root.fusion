@@ -11,13 +11,6 @@ prototype(Networkteam.Neos.Vite:Asset) {
     entry = null
 }
 
-prototype(Networkteam.Neos.Vite:AssetUrl) {
+prototype(Networkteam.Neos.Vite:AssetUrl) < prototype(Networkteam.Neos.Vite:Asset){
     @class = 'Networkteam\\Neos\\Vite\\Fusion\\AssetUrlImplementation'
-
-    sitePackageKey = ${sitePackageKey || node.context.currentSite.siteResourcesPackageKey}
-
-    outputPathPattern = 'resource://{sitePackageKey}/Public/Dist'
-    manifest = '.vite/manifest.json'
-    outputPath = null
-    entry = null
 }

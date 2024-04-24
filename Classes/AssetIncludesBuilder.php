@@ -32,17 +32,17 @@ class AssetIncludesBuilder
 
     public function developmentInclude(string $entry): string
     {
-        if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
-            $viteServerUrl = $this->serverConfiguration[$this->sitePackageKey]['url'];
-        } else {
-            $viteServerUrl = $this->serverConfiguration['_default']['url'];
-        }
-
         // Note: Vite docs mention that in development mode a http://localhost:5173/@vite/client script needs to be included,
         // but that seems to be automatically taken care of.
 
-        $url = rtrim($viteServerUrl, '/') . '/' . $entry;
+        $url = rtrim($this->getViteServerUrl(), '/') . '/' . $entry;
         return '<script type="module" src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"></script>';
+    }
+
+    public function developmentUrl(string $entry): string
+    {
+        $url = rtrim($this->getViteServerUrl(), '/') . '/' . $entry;
+        return $url;
     }
 
     /**
@@ -50,34 +50,76 @@ class AssetIncludesBuilder
      */
     public function productionIncludes(string $entry): string
     {
-        $manifestPath = Files::concatenatePaths([$this->outputPath, $this->manifest]);
-        $manifestContent = Files::getFileContents($manifestPath);
+        $manifest = $this->getManifest();
 
-        $manifestJson = json_decode($manifestContent, true);
-
-        if (!isset($manifestJson[$entry])) {
+        if (!isset($manifest[$entry])) {
+            $manifestPath = $this->getManifestPath();
             throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
         }
 
         $includes = [];
+        $manifestEntry = $manifest[$entry];
 
-        $manifestEntry = $manifestJson[$entry];
         if (isset($manifestEntry['css'])) {
             foreach ($manifestEntry['css'] as $cssFile) {
                 $includes[] = '<link rel="stylesheet" href="' . htmlspecialchars($this->buildPublicResourceUrl($cssFile), ENT_QUOTES, 'UTF-8') . '">';
             }
         }
         if (isset($manifestEntry['imports'])) {
-            $this->recurseImportedChunksCSS($includes, $manifestJson, $manifestEntry['imports']);
+            $this->recurseImportedChunksCSS($includes, $manifest, $manifestEntry['imports']);
         }
         if (isset($manifestEntry['file'])) {
             $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
         }
         if (isset($manifestEntry['imports'])) {
-            $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);
+            $this->recurseImportedChunkFiles($includes, $manifest, $manifestEntry['imports']);
         }
 
         return implode(PHP_EOL, $includes);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function productionUrl(string $entry): string
+    {
+        $manifest = $this->getManifest();
+
+        if (!isset($manifestEntry)) {
+            $manifestPath = $this->getManifestPath();
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+        }
+
+        $manifestEntry = $manifest[$entry];
+        if (isset($manifestEntry['file'])) {
+            return $this->buildPublicResourceUrl($manifestEntry['file']);
+        }
+
+        throw new Exception('Entry "' . $entry . '" does not have a file key in the manifest', 1712320814);
+    }
+
+    private function getViteServerUrl(): string
+    {
+        if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
+            return $this->serverConfiguration[$this->sitePackageKey]['url'];
+        } else {
+            return $this->serverConfiguration['_default']['url'];
+        }
+    }
+
+    private function getManifestPath(): string
+    {
+        return Files::concatenatePaths([$this->outputPath, $this->manifest]);
+    }
+
+    private function getManifest(): array
+    {
+        $manifestPath = $this->getManifestPath();
+        $manifestContent = Files::getFileContents($manifestPath);
+
+        $manifestJson = json_decode($manifestContent, true);
+
+        return $manifestJson;
     }
 
     private function recurseImportedChunksCSS(array &$includes, array $manifestJson, array $imports): void

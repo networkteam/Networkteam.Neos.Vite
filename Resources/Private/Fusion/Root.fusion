@@ -10,3 +10,7 @@ prototype(Networkteam.Neos.Vite:Asset) {
     outputPath = null
     entry = null
 }
+
+prototype(Networkteam.Neos.Vite:AssetUrl) < prototype(Networkteam.Neos.Vite:Asset){
+    @class = 'Networkteam\\Neos\\Vite\\Fusion\\AssetUrlImplementation'
+}

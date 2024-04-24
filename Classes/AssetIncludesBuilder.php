@@ -30,39 +30,27 @@ class AssetIncludesBuilder
     ) {
     }
 
-    public function developmentInclude(string $entry, bool $bareResource): string
+    public function developmentInclude(string $entry): string
     {
-        if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
-            $viteServerUrl = $this->serverConfiguration[$this->sitePackageKey]['url'];
-        } else {
-            $viteServerUrl = $this->serverConfiguration['_default']['url'];
-        }
-
         // Note: Vite docs mention that in development mode a http://localhost:5173/@vite/client script needs to be included,
         // but that seems to be automatically taken care of.
 
-        $url = rtrim($viteServerUrl, '/') . '/' . $entry;
-
-        if ($bareResource) {
-            return $url;
-        }
-
+        $url = rtrim($this->getViteServerUrl(), '/') . '/' . $entry;
         return '<script type="module" src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"></script>';
+    }
+
+    public function developmentUrl(string $entry): string
+    {
+        $url = rtrim($this->getViteServerUrl(), '/') . '/' . $entry;
+        return $url;
     }
 
     /**
      * @throws Exception
      */
-    public function productionIncludes(string $entry, bool $bareResource): string
+    public function productionIncludes(string $entry): string
     {
-        $manifestPath = Files::concatenatePaths([$this->outputPath, $this->manifest]);
-        $manifestContent = Files::getFileContents($manifestPath);
-
-        $manifestJson = json_decode($manifestContent, true);
-
-        if (!isset($manifestJson[$entry])) {
-            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
-        }
+        $manifestJson = $this->getManifestJson($entry);
 
         $includes = [];
 
@@ -76,18 +64,51 @@ class AssetIncludesBuilder
             $this->recurseImportedChunksCSS($includes, $manifestJson, $manifestEntry['imports']);
         }
         if (isset($manifestEntry['file'])) {
-            $fileUrl = htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8');
-            if ($bareResource) {
-                $includes[] = $fileUrl;
-            } else {
-                $includes[] = '<script type="module" src="' . $fileUrl . '"></script>';
-            }
+            $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
         }
         if (isset($manifestEntry['imports'])) {
             $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);
         }
 
         return implode(PHP_EOL, $includes);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function productionUrl(string $entry): string
+    {
+        $manifestJson = $this->getManifestJson($entry);
+
+        $manifestEntry = $manifestJson[$entry];
+        if (isset($manifestEntry['file'])) {
+            return $this->buildPublicResourceUrl($manifestEntry['file']);
+        }
+
+        throw new Exception('Entry "' . $entry . '" does not have a key file in the manifest file "' . $manifestPath . '"', 1712320814);
+    }
+
+    private function getViteServerUrl(): string
+    {
+        if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
+            return $this->serverConfiguration[$this->sitePackageKey]['url'];
+        } else {
+            return $this->serverConfiguration['_default']['url'];
+        }
+    }
+
+    private function getManifestJson(string $entry): array
+    {
+        $manifestPath = Files::concatenatePaths([$this->outputPath, $this->manifest]);
+        $manifestContent = Files::getFileContents($manifestPath);
+
+        $manifestJson = json_decode($manifestContent, true);
+
+        if (!isset($manifestJson[$entry])) {
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+        }
+
+        return $manifestJson;
     }
 
     private function recurseImportedChunksCSS(array &$includes, array $manifestJson, array $imports): void

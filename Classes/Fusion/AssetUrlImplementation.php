@@ -2,24 +2,10 @@
 namespace Networkteam\Neos\Vite\Fusion;
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Utility\Environment;
-use Neos\Fusion\FusionObjects\AbstractFusionObject;
-use Neos\Neos\Domain\Service\ContentContext;
 use Networkteam\Neos\Vite\AssetIncludesBuilder;
-use Networkteam\Neos\Vite\Exception;
 
-class AssetImplementation extends AbstractFusionObject
+class AssetUrlImplementation extends AssetImplementation
 {
-
-    /**
-     * @Flow\Inject
-     * @var Environment
-     */
-    protected $environment;
-
-    /**
-     * @throws Exception
-     */
     public function evaluate()
     {
         $entry = $this->fusionValue('entry');
@@ -37,9 +23,9 @@ class AssetImplementation extends AbstractFusionObject
         $builder = new AssetIncludesBuilder($sitePackageKey, $outputPath, $manifest);
 
         if ($this->environment->getContext()->isProduction()) {
-            return $builder->productionIncludes($entry);
+            return $builder->productionUrl($entry);
         }
-        return $builder->developmentInclude($entry);
+        return $builder->developmentUrl($entry);
     }
 
 }

@@ -25,6 +25,7 @@ class AssetImplementation extends AbstractFusionObject
         $entry = $this->fusionValue('entry');
         $outputPath = $this->fusionValue('outputPath');
         $manifest = $this->fusionValue('manifest');
+        $bareResource = $this->fusionValue('bareResource');
 
         $outputPathPattern = $this->fusionValue('outputPathPattern');
 
@@ -37,9 +38,9 @@ class AssetImplementation extends AbstractFusionObject
         $builder = new AssetIncludesBuilder($sitePackageKey, $outputPath, $manifest);
 
         if ($this->environment->getContext()->isProduction()) {
-            return $builder->productionIncludes($entry);
+            return $builder->productionIncludes($entry, $bareResource);
         }
-        return $builder->developmentInclude($entry);
+        return $builder->developmentInclude($entry, $bareResource);
     }
 
 }

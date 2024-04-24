@@ -30,7 +30,7 @@ class AssetIncludesBuilder
     ) {
     }
 
-    public function developmentInclude(string $entry): string
+    public function developmentInclude(string $entry, bool $bareResource): string
     {
         if (isset($this->serverConfiguration[$this->sitePackageKey]['url'])) {
             $viteServerUrl = $this->serverConfiguration[$this->sitePackageKey]['url'];
@@ -42,13 +42,18 @@ class AssetIncludesBuilder
         // but that seems to be automatically taken care of.
 
         $url = rtrim($viteServerUrl, '/') . '/' . $entry;
+
+        if ($bareResource) {
+            return $url;
+        }
+
         return '<script type="module" src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"></script>';
     }
 
     /**
      * @throws Exception
      */
-    public function productionIncludes(string $entry): string
+    public function productionIncludes(string $entry, bool $bareResource): string
     {
         $manifestPath = Files::concatenatePaths([$this->outputPath, $this->manifest]);
         $manifestContent = Files::getFileContents($manifestPath);
@@ -71,7 +76,12 @@ class AssetIncludesBuilder
             $this->recurseImportedChunksCSS($includes, $manifestJson, $manifestEntry['imports']);
         }
         if (isset($manifestEntry['file'])) {
-            $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
+            $fileUrl = htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8');
+            if ($bareResource) {
+                $includes[] = $fileUrl;
+            } else {
+                $includes[] = '<script type="module" src="' . $fileUrl . '"></script>';
+            }
         }
         if (isset($manifestEntry['imports'])) {
             $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);

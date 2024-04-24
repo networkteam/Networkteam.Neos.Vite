@@ -9,4 +9,5 @@ prototype(Networkteam.Neos.Vite:Asset) {
     manifest = '.vite/manifest.json'
     outputPath = null
     entry = null
+    bareResource = false
 }

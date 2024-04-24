@@ -50,24 +50,29 @@ class AssetIncludesBuilder
      */
     public function productionIncludes(string $entry): string
     {
-        $manifestJson = $this->getManifestJson($entry);
+        $manifest = $this->getManifest();
+
+        if (!isset($manifest[$entry])) {
+            $manifestPath = $this->getManifestPath();
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+        }
 
         $includes = [];
+        $manifestEntry = $manifest[$entry];
 
-        $manifestEntry = $manifestJson[$entry];
         if (isset($manifestEntry['css'])) {
             foreach ($manifestEntry['css'] as $cssFile) {
                 $includes[] = '<link rel="stylesheet" href="' . htmlspecialchars($this->buildPublicResourceUrl($cssFile), ENT_QUOTES, 'UTF-8') . '">';
             }
         }
         if (isset($manifestEntry['imports'])) {
-            $this->recurseImportedChunksCSS($includes, $manifestJson, $manifestEntry['imports']);
+            $this->recurseImportedChunksCSS($includes, $manifest, $manifestEntry['imports']);
         }
         if (isset($manifestEntry['file'])) {
             $includes[] = '<script type="module" src="' . htmlspecialchars($this->buildPublicResourceUrl($manifestEntry['file']), ENT_QUOTES, 'UTF-8') . '"></script>';
         }
         if (isset($manifestEntry['imports'])) {
-            $this->recurseImportedChunkFiles($includes, $manifestJson, $manifestEntry['imports']);
+            $this->recurseImportedChunkFiles($includes, $manifest, $manifestEntry['imports']);
         }
 
         return implode(PHP_EOL, $includes);
@@ -78,14 +83,19 @@ class AssetIncludesBuilder
      */
     public function productionUrl(string $entry): string
     {
-        $manifestJson = $this->getManifestJson($entry);
+        $manifest = $this->getManifest();
 
-        $manifestEntry = $manifestJson[$entry];
+        if (!isset($manifestEntry)) {
+            $manifestPath = $this->getManifestPath();
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+        }
+
+        $manifestEntry = $manifest[$entry];
         if (isset($manifestEntry['file'])) {
             return $this->buildPublicResourceUrl($manifestEntry['file']);
         }
 
-        throw new Exception('Entry "' . $entry . '" does not have a key file in the manifest file "' . $manifestPath . '"', 1712320814);
+        throw new Exception('Entry "' . $entry . '" does not have a file key in the manifest', 1712320814);
     }
 
     private function getViteServerUrl(): string
@@ -97,16 +107,17 @@ class AssetIncludesBuilder
         }
     }
 
-    private function getManifestJson(string $entry): array
+    private function getManifestPath(): string
     {
-        $manifestPath = Files::concatenatePaths([$this->outputPath, $this->manifest]);
+        return Files::concatenatePaths([$this->outputPath, $this->manifest]);
+    }
+
+    private function getManifest(): array
+    {
+        $manifestPath = $this->getManifestPath();
         $manifestContent = Files::getFileContents($manifestPath);
 
         $manifestJson = json_decode($manifestContent, true);
-
-        if (!isset($manifestJson[$entry])) {
-            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
-        }
 
         return $manifestJson;
     }

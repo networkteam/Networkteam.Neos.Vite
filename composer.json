@@ -2,7 +2,7 @@
     "name": "networkteam/neos-vite",
     "type": "neos-package",
     "description": "Integrate Vite for asset bundling into Neos CMS",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "require": {
         "neos/neos": "^8",
         "ext-json": "*"

@@ -53,8 +53,7 @@ class AssetIncludesBuilder
         $manifest = $this->getManifest();
 
         if (!isset($manifest[$entry])) {
-            $manifestPath = $this->getManifestPath();
-            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $this->getManifestPath() . '"', 1712320814);
         }
 
         $includes = [];
@@ -85,9 +84,8 @@ class AssetIncludesBuilder
     {
         $manifest = $this->getManifest();
 
-        if (!isset($manifestEntry)) {
-            $manifestPath = $this->getManifestPath();
-            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $manifestPath . '"', 1712320814);
+        if (!isset($manifest[$entry])) {
+            throw new Exception('Entry "' . $entry . '" not found in manifest file "' . $this->getManifestPath() . '"', 1712320815);
         }
 
         $manifestEntry = $manifest[$entry];
@@ -95,7 +93,7 @@ class AssetIncludesBuilder
             return $this->buildPublicResourceUrl($manifestEntry['file']);
         }
 
-        throw new Exception('Entry "' . $entry . '" does not have a file key in the manifest', 1712320814);
+        throw new Exception('Entry "' . $entry . '" does not have a "file" key in manifest file "' . $this->getManifestPath() . '"', 1712320816);
     }
 
     private function getViteServerUrl(): string

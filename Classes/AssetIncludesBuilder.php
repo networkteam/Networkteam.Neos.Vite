@@ -13,7 +13,7 @@ class AssetIncludesBuilder
 {
     /**
      * @Flow\InjectConfiguration(path="server")
-     * @var array
+     * @var array<string, array{'url': string}>
      */
     protected $serverConfiguration;
 
@@ -110,7 +110,7 @@ class AssetIncludesBuilder
         return Files::concatenatePaths([$this->outputPath, $this->manifest]);
     }
 
-    private function getManifest(): array
+    private function getManifest(): array<mixed>
     {
         $manifestPath = $this->getManifestPath();
         $manifestContent = Files::getFileContents($manifestPath);
@@ -120,6 +120,12 @@ class AssetIncludesBuilder
         return $manifestJson;
     }
 
+    /**
+     * @param array<string> $includes
+     * @param array<mixed> $manifestJson
+     * @param array<string> $imports
+     * @return void
+     */
     private function recurseImportedChunksCSS(array &$includes, array $manifestJson, array $imports): void
     {
         foreach ($imports as $import) {
@@ -135,6 +141,12 @@ class AssetIncludesBuilder
         }
     }
 
+    /**
+     * @param array<string> $includes
+     * @param array<mixed> $manifestJson
+     * @param array<string> $imports
+     * @return void
+     */
     private function recurseImportedChunkFiles(array &$includes, array $manifestJson, array $imports): void
     {
         foreach ($imports as $import) {

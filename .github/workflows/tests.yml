@@ -41,13 +41,13 @@ jobs:
       with:
         path: ${{ env.PACKAGE_FOLDER}}/${{ env.PACKAGE_NAME }}
 
-    - name: Setup PHP, with composer and extensions
+    - name: Setup PHP, with Composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
         php-version: ${{ matrix.php-versions }}
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite
 
-    - name: Get composer cache directory
+    - name: Get Composer cache directory
       id: composer-cache
       run: echo "::set-output name=dir::$(composer config cache-files-dir)"
     - name: Cache composer dependencies
@@ -66,7 +66,7 @@ jobs:
         composer require --no-update --no-interaction --no-progress ${{ env.REPOSITORY_NAME }}:"dev-build as dev-master"
         composer ${{ matrix.dependencies == 'locked' && 'install' || 'update' }} --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} ${{ matrix.composer-arguments }}
 
-    - name: Set Flow Context
+    - name: Set Flow context
       run: echo "FLOW_CONTEXT=${{ env.FLOW_CONTEXT }}" >> $GITHUB_ENV
 
     - name: Setup Flow configuration

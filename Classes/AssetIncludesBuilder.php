@@ -13,7 +13,7 @@ class AssetIncludesBuilder
 {
     /**
      * @Flow\InjectConfiguration(path="server")
-     * @var array<string, array{'url': string}>
+     * @var array<mixed>
      */
     protected $serverConfiguration;
 

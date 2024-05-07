@@ -29,10 +29,10 @@ jobs:
         working-directory: ${{ env.NEOS_FOLDER }}
 
     steps:
-    - name: Checkout Neos development distribution
+    - name: Checkout Neos base distribution
       uses: actions/checkout@v2
       with:
-        repository: neos/neos-development-distribution
+        repository: neos/neos-base-distribution
         ref: ${{ matrix.neos-versions }}
         path: ${{ env.NEOS_FOLDER }}
 

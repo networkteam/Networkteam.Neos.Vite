@@ -8,19 +8,19 @@ Go to your site package:
 cd DistributionPackages/Your.Site
 ```
 
-1. Install the package via composer
+### 1. Install the package via composer
 
 ```bash
 composer require networkteam/neos-vite
 ```
 
-2. Install Vite via NPM (or Yarn, pnpm):
+### 2. Install Vite via NPM (or Yarn, pnpm):
 
 ```bash
 npm install --save-dev vite
 ```
 
-3. Create a `vite.config.mjs` file in your site package:
+### 3. Create a `vite.config.mjs` file in your site package:
 
 ```js
 import { defineConfig } from "vite";
@@ -45,7 +45,7 @@ export default defineConfig((configEnv) => ({
 }));
 ```
 
-4. You can now include Vite assets for development / production in your Fusion files:
+### 4. You can now include Vite assets for development / production in your Fusion files:
 
 ```fusion
 header = Networkteam.Neos.Vite:Asset {
@@ -66,6 +66,18 @@ prototype(Networkteam.Neos.Vite:Asset) {
 
     outputPathPattern = 'resource://{sitePackageKey}/Public/Dist'
     manifest = '.vite/manifest.json'
+}
+```
+
+### Bonus: You can generate the URL to entries in the manifest
+
+This will only return the URL to the file for an entry without considering imports.
+
+Example for an SVG spritemap (using [vite-plugin-svg-spritemap](https://github.com/SpiriitLabs/vite-plugin-svg-spritemap)):
+
+```fusion
+src = Networkteam.Neos.Vite:AssetUrl {
+    entry = 'spritemap.svg'
 }
 ```
 

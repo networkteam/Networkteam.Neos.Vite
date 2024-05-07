@@ -110,7 +110,10 @@ class AssetIncludesBuilder
         return Files::concatenatePaths([$this->outputPath, $this->manifest]);
     }
 
-    private function getManifest(): array<mixed>
+    /**
+     * @return array<mixed>
+     */
+    private function getManifest(): array
     {
         $manifestPath = $this->getManifestPath();
         $manifestContent = Files::getFileContents($manifestPath);

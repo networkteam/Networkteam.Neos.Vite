@@ -1,0 +1,6 @@
+prototype(Networkteam.Neos.Vite:Body.Assets) < prototype(Neos.Fusion:Join) {
+    developmentOnlyScripts = Networkteam.Neos.Vite:Helper.DevelopmentOnlyScripts {
+        @context.viteUrl = ${Configuration.setting('Networkteam.Neos.Vite.server._default.url')}
+        // insert the vite client scripts
+    }
+}

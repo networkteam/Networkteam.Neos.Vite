@@ -1,0 +1,7 @@
+prototype(Networkteam.Neos.Vite:Head.Assets) < prototype(Neos.Fusion:Join) {
+    developmentOnlyScripts = Networkteam.Neos.Vite:Helper.DevelopmentOnlyScripts {
+        @context.viteUrl = ${Configuration.setting('Networkteam.Neos.Vite.server._default.url')}
+        // Inject the react-refresh runtime into the page see: https://vitejs.dev/guide/backend-integration
+        reactRefresh = ${"<script type='module'>import RefreshRuntime from '" + viteUrl + "@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$ = () => {};window.$RefreshSig$ = () => (type) => type;window.__vite_plugin_react_preamble_installed__ = true</script>"}
+    }
+}

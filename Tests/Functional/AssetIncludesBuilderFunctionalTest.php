@@ -49,7 +49,7 @@ class AssetIncludesBuilderFunctionalTest extends FunctionalTestCase
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/main.b82dbe22.css">' . PHP_EOL .
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.a834bfc3.css">' . PHP_EOL .
             '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/main.4889e940.js"></script>' . PHP_EOL .
-            '<script type="modulepreload" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
+            '<link rel="modulepreload" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js">'
             , $html, 'should create correct includes for main entry');
 
         $file = $builder->productionUrl('main.js');
@@ -59,7 +59,7 @@ class AssetIncludesBuilderFunctionalTest extends FunctionalTestCase
         $this->assertEquals(
             '<link rel="stylesheet" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.a834bfc3.css">' . PHP_EOL .
             '<script type="module" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/foo.869aea0d.js"></script>' . PHP_EOL .
-            '<script type="modulepreload" src="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js"></script>'
+            '<link rel="modulepreload" href="http://localhost/_Resources/Testing/Static/Packages/Networkteam.Neos.Vite/Dist/assets/shared.83069a53.js">'
             , $html, 'should create correct includes for other entries');
 
         $file = $builder->productionUrl('views/foo.js');

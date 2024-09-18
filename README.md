@@ -37,6 +37,11 @@ export default defineConfig((configEnv) => ({
         header: "Resources/Private/Javascript/header.js",
       },
       output: {
+        // The Flowpack.CacheBuster package adds a `?bust` get parameter with a hash based on the file content.
+        // This leads to issues with files imported from the manifest, as they may be loaded twice.
+        // (Once with the bust parameter and once without, as they are technically two different URLs.)
+        // To work around this we add a "bust" infix so CacheBuster skips adding the bust parameter.
+        entryFileNames: "assets/[name]-bust-[hash].js",
         // If you use this output option the Fusion object will just work™️
         dir: "Resources/Public/Dist",
       },

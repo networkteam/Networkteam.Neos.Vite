@@ -1,0 +1,31 @@
+/**
+  * Usage:
+  * developmentOnlyScripts = Viebrockhaus.Base:Helper.DevelopmentOnlyScripts {
+  *     @context.viteUrl = ${Configuration.setting('Networkteam.Neos.Vite.server._default.url')}
+  *     0 = ${'<script type="module" src="' + viteUrl + '@vite-plugin-svg-spritemap/client"></script>'}
+  * }
+  *
+  */
+
+prototype(Networkteam.Neos.Vite:Helper.DevelopmentOnlyScripts) < prototype(Neos.Fusion:Join) {
+    @context {
+        flowContext = ${Configuration.setting('Neos.Flow.core.context')}
+    }
+    @if.isDevelopmentContext = ${String.indexOf(flowContext, 'Development') >= 0}
+}
+
+prototype(Networkteam.Neos.Vite:Helper.IsDevelopmentOnly) < prototype(Neos.Fusion:Case) {
+    @context {
+        flowContext = ${Configuration.setting('Neos.Flow.core.context')}
+    }
+
+    inDevelopment {
+        condition = ${String.indexOf(flowContext, 'Development') >= 0}
+        renderer = ${true}
+    }
+
+    default {
+        condition = ${true}
+        renderer = ${false}
+    }
+}

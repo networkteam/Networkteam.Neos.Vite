@@ -52,9 +52,63 @@ export default defineConfig((configEnv) => ({
 
 ### 4. You can now include Vite assets for development / production in your Fusion files:
 
+Let the package include everything for you, including [vite development scripts](https://vitejs.dev/guide/backend-integration):
+
+```fusion
+prototype(Customer.Base:Document.DefaultPage) < prototype(Neos.Neos:Page) {
+    head {
+        javascript.base = Networkteam.Neos.Vite:Head.Assets {
+            header = Networkteam.Neos.Vite:Asset {
+                entry = 'Resources/Private/Javascript/header.js'
+            }
+        }
+    }
+
+    bodyAssets = Networkteam.Neos.Vite:Body.Assets {
+        footer = Networkteam.Neos.Vite:Asset {
+          entry = 'Resources/Private/Javascript/footer.js'
+        }
+
+        // Include development scripts needed by Vite, for example:
+        developmentOnlyScripts {
+            // here you have access to the Vite server URL via context variable `viteUrl`
+            pluginName = ${'<script type="module" src="' + viteUrl + '@vite-plugin/client"></script>'}
+        }
+        @position = 'before closingBodyTag'
+    }
+}
+```
+
+Or, include everything manually using:
+
 ```fusion
 header = Networkteam.Neos.Vite:Asset {
     entry = 'Resources/Private/Javascript/header.js'
+}
+
+developmentOnlyScripts = Networkteam.Neos.Vite:Helper.DevelopmentOnlyScripts {
+    @context.viteUrl = ${Configuration.setting('Networkteam.Neos.Vite.server._default.url')}
+    pluginName = '<script type="module" src="' + viteUrl + '@vite-plugin/client"></script>'
+}
+```
+
+You can also use development-only scripts as Condition with Prototype `Networkteam.Neos.Vite:Helper.IsDevelopmentOnly`:
+
+```fusion
+prototype(Customer.Base:Helper.SpritemapBaseUrl) < prototype(Neos.Fusion:Case) {
+    inDevelopmentMode {
+        condition = Networkteam.Neos.Vite:Helper.IsDevelopmentOnly
+        renderer = '#icon-'
+    }
+    default {
+        condition = ${false}
+        renderer = Neos.Fusion:Value {
+            @context.spritemap = Networkteam.Neos.Vite:AssetUrl {
+                entry = 'spritemap.svg'
+            }
+            value = ${spritemap + '#icon-'}
+        }
+    }
 }
 ```
 

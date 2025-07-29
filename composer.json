@@ -3,7 +3,7 @@
     "type": "neos-package",
     "description": "Integrate Vite for asset bundling into Neos CMS",
     "require": {
-        "neos/neos": "^8 || ^9",
+        "neos/neos": "^9",
         "ext-json": "*"
     },
     "autoload": {

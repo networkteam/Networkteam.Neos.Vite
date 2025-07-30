@@ -2,10 +2,10 @@
 
 ## Compatibility
 
-| NeosCMS       | Plugin |
-|---------------|--------|
-| >= 9.0        | 0.4.x  |
-| >= 8.0, < 9.0 | 0.3.x  |
+| NeosCMS | Plugin |
+|---------|--------|
+| >= 9.0  | 0.4.x  |
+| 8.x     | 0.3.x  |
 
 ## Installation
 

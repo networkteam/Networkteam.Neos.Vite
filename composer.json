@@ -3,9 +3,13 @@
     "type": "neos-package",
     "description": "Integrate Vite for asset bundling into Neos CMS",
     "require": {
-        "neos/neos": "^8 || ^9",
+        "neos/neos": "^9.0",
         "ext-json": "*"
     },
+    "require-dev": {
+        "neos/contentgraph-doctrinedbaladapter": "*"
+    },
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Networkteam\\Neos\\Vite\\": "Classes"

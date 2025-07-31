@@ -6,13 +6,13 @@
         "neos/neos": "^9.0",
         "ext-json": "*"
     },
+    "require-dev": {
+        "neos/contentgraph-doctrinedbaladapter": "^9.0"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "Networkteam\\Neos\\Vite\\": "Classes"
         }
-    },
-    "require-dev": {
-        "neos/contentgraph-doctrinedbaladapter": "^9.0"
     }
 }

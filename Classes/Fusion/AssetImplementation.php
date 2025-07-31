@@ -4,7 +4,6 @@ namespace Networkteam\Neos\Vite\Fusion;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Utility\Environment;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
-use Neos\Neos\Domain\Service\ContentContext;
 use Networkteam\Neos\Vite\AssetIncludesBuilder;
 use Networkteam\Neos\Vite\Exception;
 

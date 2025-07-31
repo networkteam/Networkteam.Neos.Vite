@@ -3,7 +3,7 @@
     "type": "neos-package",
     "description": "Integrate Vite for asset bundling into Neos CMS",
     "require": {
-        "neos/neos": "^9",
+        "neos/neos": "^9.0",
         "neos/contentgraph-doctrinedbaladapter": "*",
         "ext-json": "*"
     },

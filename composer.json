@@ -7,7 +7,7 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "neos/contentgraph-doctrinedbaladapter": "^9.0"
+        "neos/contentgraph-doctrinedbaladapter": "*"
     },
     "license": "MIT",
     "autoload": {

@@ -11,6 +11,7 @@
         "psr-4": {
             "Networkteam\\Neos\\Vite\\": "Classes"
         }
+    },
     "require-dev": {
         "neos/contentgraph-doctrinedbaladapter": "^9.0"
     }
